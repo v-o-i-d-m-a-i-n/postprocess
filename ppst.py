@@ -8,25 +8,21 @@ import numpy as np
 
 
 
-def wp_static_filter(points,wp_range,ItC):
+def wp_static_filter(points,wp_range={'low_bound':0,'high_bound':1},ItC=None):
     # points=np.array((number_of_points,20),dtype=float64)
     # wp_range={'low_bound':wp_mean-wp_sigma,'high_bound':wp_mean+wp_sigma}
     # ItC=index_to_check
     # return: possible wrong points and their resigned classes
 
-    wp=np.zeros((points.shape[0],21),dtype=np.int32)
-    # wp[0,0]=-1
+    wp=np.zeros((points.shape[0],21),dtype=np.int32)    #record the wrong points
     wp_idx=0
     for i in range(points.shape[0]):
         wp[wp_idx,0]=i
         for cl1 in range(len(ItC)):
             wp[wp_idx,cl1+1]=1 # assume all conditions are satisfied, resign class
             for cl2 in ItC[cl1]:
-        # j = index_to_check[label[i],0] 
-                
-                    
                 if points[i,cl2]<wp_range['low_bound'][cl1,cl2] or points[i,cl2]>wp_range['high_bound'][cl1,cl2]:
-                # point_i not satisfied all condition, not wrong points, ignore and break the loop
+                # point_i not satisfying all conditions, right point, ignore and break the loop
                     wp[wp_idx,cl1+1]=0
                     # wp[wp_idx,0]=-1 
                     break
@@ -88,8 +84,9 @@ if __name__=='__main__':
     [13,15,16],                 #18  
     [6,15,18]                   #19
 ]
+    # class 9 and 10 are easy to mix up
     
-    ### random init
+    ### random init data
     for i in range(20):
         for j in range(20):
             wp_m[i,j]=uniform(0.3,0.7)

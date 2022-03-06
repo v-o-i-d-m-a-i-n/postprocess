@@ -1,3 +1,4 @@
+from ast import If
 import numpy as np
 
 wp_mean=np.zeros((18,18),dtype=np.float64)
@@ -33,29 +34,48 @@ index_to_check = [
     [1,4,5,6,9,11,13,14,15],    #4
     [1,5,13,14,15],             #5
     [11,13,15],                 #6
-    [3,6,9,11,15],              #7
-    [3,6,11,15],                #8
-    [9,11,17],                  #9
+    [3,6,9,11,15],              #8
+    [3,6,11,15],                #9
     [9,11,17],                  #10
-    [9,11,15,17],               #11
+    [9,11,17],                  #11
     [9,11,15,17],               #12
-    [13,14,15],                 #13
-    [13,15],                    #14
-    [11,13,14,15,16,17,18,19],  #15
-    [15,16,17],                 #16
-    [11,15,17],                 #17
-    [13,15,16],                 #18  
-    [6,15,18],                  #19
+    [9,11,15,17],               #13
+    [13,14,15],                 #14
+    [13,15],                    #15
+    [11,13,14,15,16,17,18,19],  #16
+    [15,16,17],                 #17
+    [11,15,17],                 #18
+    [13,15,16],                 #19  
+    [6,15,18],                  #20
 ]
 
 
-def wp_static_filter(points,label,wp_range={'low_bound':wp_mean-wp_sigma,'high_bound':wp_mean+wp_sigma},index_to_check=index_to_check):
+def wp_static_filter(points,label,wp_range={'low_bound':wp_mean-wp_sigma,'high_bound':wp_mean+wp_sigma},ItC=index_to_check):
     # return possible wrong points and their resigned classes
-    wp_range[i,j]['low_bound']
+    wp=np.zeros((points.size()[0],points.size()[1]+1),dtype=np.int32)
+    # wp_range[i,j]['low_bound']
+    wp[0,0]=-1
+    wp_idx=0
     for i in range(points.size()[0]):
-        # for
-        j = index_to_check[label[i],0] 
-        if points[i,j+6]<wp_range[i,j]['low_bound'] or points[i,j+6]>wp_range[i,j]['high_bound']:
-            # not satisfied all condition, possible wrong points, resign class and break the loop
-            break
-    return
+        for cl1 in range(len(ItC)):
+            wp[wp_idx,0]=i
+            for cl2 in ItC[cl1]:
+        # j = index_to_check[label[i],0] 
+                
+                if points[i,cl2+6]>wp_range['low_bound'][cl1,cl2] and points[i,cl2+6]<wp_range['high_bound'][cl1,cl2]:
+                    # possible wrong
+                    
+                    wp[wp_idx,cl1+1]=1
+                else:
+                # point_i not satisfied all condition, not wrong points, ignore and break the loop
+                    # wp[wp_idx,0]=
+                    wp[wp_idx,0]=-1
+            
+                    
+                    break
+        if wp[wp_idx]==-1:
+            wp[wp_idx,:]=0
+        else:
+            wp_idx+=1
+
+    return wp

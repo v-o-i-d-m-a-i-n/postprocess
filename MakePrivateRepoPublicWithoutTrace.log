@@ -46,7 +46,7 @@ user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
 $ git branch
 * main
 
-### try to push the local repo to new remote, the idear is right but requirelogin, can't carry on
+### try to push the local repo to new remote, the idea is right but require login, can't carry on
 user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
 $ git push hackit main
 fatal: credential-cache--daemon unavailable; no unix socket support

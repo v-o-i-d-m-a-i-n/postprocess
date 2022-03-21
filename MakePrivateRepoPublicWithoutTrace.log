@@ -1,0 +1,132 @@
+refer to: Git 合并两个不同的仓库 https://blog.csdn.net/qq_14824885/article/details/113865296
+
+https://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@github.com/vacutice/postprocess.git
+
+https://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@github.com/v-o-i-d-m-a-i-n/postprocess.git
+
+### clone the private repo to make it public "without trace" 
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show
+$ git clone https://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@github.com/vacutice/postprocess.git
+Cloning into 'postprocess'...
+remote: Enumerating objects: 24, done.
+remote: Counting objects: 100% (24/24), done.
+remote: Compressing objects: 100% (15/15), done.
+remote: Total 24 (delta 6), reused 14 (delta 4), pack-reused 0
+Receiving objects: 100% (24/24), 8.43 KiB | 2.81 MiB/s, done.
+Resolving deltas: 100% (6/6), done.
+
+### ignore this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show
+$ git remote add hackit https://github.com/v-o-i-d-m-a-i-n/postprocess.git
+fatal: not a git repository (or any of the parent directories): .git
+
+### ignore this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show
+$ git remote add hackit https://github.com/v-o-i-d-m-a-i-n/postprocess.git
+fatal: not a git repository (or any of the parent directories): .git
+
+### cd into the directory
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show
+$ cd postprocess
+
+### add new remote to the repo, not a good way, can only pull, pushing requires login, but github no longer supports it that way. 
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git remote add hackit https://github.com/v-o-i-d-m-a-i-n/postprocess.git
+
+### fetch from new remote, the repo on new remote is created on website but not initialized
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git fetch hackit
+
+### try to create a new branch on new remote, but wrong way
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git checkout -b hack hackit/main
+fatal: 'hackit/main' is not a commit and a branch 'hack' cannot be created from it
+
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git branch
+* main
+
+### try to push the local repo to new remote, the idear is right but requirelogin, can't carry on
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git push hackit main
+fatal: credential-cache--daemon unavailable; no unix socket support
+error: unable to read askpass response from 'F:/PortableGit/mingw64/bin/git-askpass.exe'
+Username for 'https://github.com':
+error: unable to read askpass response from 'F:/PortableGit/mingw64/bin/git-askpass.exe'
+Password for 'https://github.com':
+remote: No anonymous write access.
+fatal: Authentication failed for 'https://github.com/v-o-i-d-m-a-i-n/postprocess.git/'
+
+### igonre this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git checkout -b hack
+Switched to a new branch 'hack'
+
+### igore this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$ ls
+README.md  __pycache__/  ppst.py  utils.py
+
+### try differently, use token to access 
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$ git remote rm hackit
+
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$ git remote add hackit https://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@github.com/v-o-i-d-m-a-i-n/postprocess.git
+
+### ignore this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$ git checkout -b main
+fatal: A branch named 'main' already exists.
+
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$ git checkout main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+### fetch from new remote
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git fetch hackit
+
+### typing error, my bad
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git pull mian hackit/main
+fatal: 'mian' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+### typing error
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git push mian hackit/main
+error: src refspec hackit/main does not match any
+error: failed to push some refs to 'mian'
+
+### push local branch main, which is tracking previous private remote repo, to the new remote and create a new branch naming main 
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git push hackit main
+Enumerating objects: 24, done.
+Counting objects: 100% (24/24), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (13/13), done.
+Writing objects: 100% (24/24), 8.43 KiB | 8.43 MiB/s, done.
+Total 24 (delta 6), reused 24 (delta 6), pack-reused 0
+remote: Resolving deltas: 100% (6/6), done.
+To https://github.com/v-o-i-d-m-a-i-n/postprocess.git
+ * [new branch]      main -> main
+
+### igonre this
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git branch --delete hack
+Deleted branch hack (was 5eaf1c8).
+
+### now create a local branch to track the new remote, it succeeds
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (main)
+$ git checkout -b hack hackit/main
+Switched to a new branch 'hack'
+Branch 'hack' set up to track remote branch 'main' from 'hackit'.
+
+user@JCZ MINGW64 /h/o.l.i/Code/git-steal-the-show/postprocess (hack)
+$
+
